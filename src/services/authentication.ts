@@ -1,8 +1,9 @@
+import { BASE_URL } from "./api";
 import { User } from "./types";
 
 export async function login(data: User) {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+    `${BASE_URL}/auth/login`,
     {
       method: "POST",
       headers: {
