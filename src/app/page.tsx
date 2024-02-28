@@ -1,11 +1,11 @@
-import { getCheckConnection } from "@/services/api";
+import { getAnimals, getSpecies } from "@/services/animals";
+import { HomePage } from "./components/HomePage";
 
 export default async function Home() {
-  const checkConnection = await getCheckConnection();
+  const animals = await getAnimals();
+  const species = await getSpecies();
 
   return (
-    <main>
-      {checkConnection.message}
-    </main>
+    <HomePage animals={animals} species={species} />
   );
 }
