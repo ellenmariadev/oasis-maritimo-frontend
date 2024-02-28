@@ -5,7 +5,6 @@
     "jest": true
   },
   "extends": [
-    "next",
     "next/core-web-vitals",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -31,6 +30,7 @@
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
     "react/react-in-jsx-scope": "off",
-    "react/jsx-no-target-blank": "off"
+    "react/jsx-no-target-blank": "off",
+    "react/prop-types": "off"
   }
 }
