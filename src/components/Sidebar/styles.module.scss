@@ -1,7 +1,13 @@
 .sidebar {
     color: white;
-
     ul li {
-        border-left: 2px solid white;
+        &:hover {
+            background-color: #00b4d85d;
+        }
     }
+}
+
+.active {
+        border-left: 3px solid white;
+        background-color: #00B5D8;
 }
