@@ -1,17 +1,19 @@
-import { createAnimal } from "@/services/animals";
-import { AnimalRequest, Specie } from "@/services/types";
-import { Button, FormControl, FormErrorMessage, FormHelperText, FormLabel, Grid, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select } from "@chakra-ui/react";
+"use client";
+import { updateAnimal } from "@/services/animals";
+import { Animal, AnimalRequest, Specie } from "@/services/types";
+import { Button, FormControl, FormErrorMessage, FormLabel, Grid, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select } from "@chakra-ui/react";
 import { FormEvent, useRef, useState } from "react";
 import { FormValues } from "./types";
 import { convertDate } from "@/utils/convertDate";
 
 type AnimalModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  species: Specie[];
+    isOpen: boolean;
+    onClose: () => void;
+    species: Specie[];
+    animal: Animal;
 };
 
-const CreateAnimalModal: React.FC<AnimalModalProps> = ({ isOpen, onClose, species }) => {
+const UpdateAnimalModal: React.FC<AnimalModalProps> = ({ isOpen, onClose, species, animal }) => {
   const initialRef = useRef(null);
   const finalRef = useRef(null);
   let token = "";
@@ -20,21 +22,19 @@ const CreateAnimalModal: React.FC<AnimalModalProps> = ({ isOpen, onClose, specie
   }
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [speciesId, setSpeciesId] = useState<string>("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const initializeFormValues = () => ({
-    nome: "",
-    idade: "",
-    datadechegada: "",
-    dieta: "",
-    peso: "",
-    tamanho: "",
-    habitat: "",
+    nome: animal.name,
+    idade: animal.age.toString(),
+    datadechegada: animal.arrivalDate,
+    dieta: animal.diet,
+    peso: animal.weight.toString(),
+    tamanho: animal.length.toString(),
+    habitat: animal.habitat,
   });
 
   const [formValues, setFormValues] = useState<FormValues>(initializeFormValues());
-  const [errorMessages, setErrorMessages] = useState<FormValues>(initializeFormValues());
 
   const formFields: { label: string, placeholder: string, type?: string }[] = [
     { label: "Nome", placeholder: "Insira o nome do animal" },
@@ -46,20 +46,11 @@ const CreateAnimalModal: React.FC<AnimalModalProps> = ({ isOpen, onClose, specie
     { label: "Habitat", placeholder: "Oceano pacífico, índico..." },
   ];
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setImageFile(event.target.files ? event.target.files[0] : null);
-  };
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormValues(prevState => ({
       ...prevState,
       [name as keyof typeof prevState]: value
-    }));
-
-    setErrorMessages(prevState => ({
-      ...prevState,
-      [name as keyof typeof prevState]: value ? "" : "Este campo é obrigatório."
     }));
   };
 
@@ -67,10 +58,10 @@ const CreateAnimalModal: React.FC<AnimalModalProps> = ({ isOpen, onClose, specie
     event.preventDefault();
     setIsLoading(true);
 
-
     const animalData: AnimalRequest = {
+      id: animal.id,
       name: formValues.nome,
-      speciesId: speciesId,
+      speciesId: speciesId ?? (typeof animal.specie !== "string" && animal.specie.id),
       age: Number(formValues.idade),
       arrivalDate: convertDate(formValues.datadechegada),
       diet: formValues.dieta,
@@ -80,7 +71,7 @@ const CreateAnimalModal: React.FC<AnimalModalProps> = ({ isOpen, onClose, specie
     };
 
     try {
-      await createAnimal(imageFile, animalData, token);
+      await updateAnimal(animalData, token);
       setErrorMessage(null);
       onClose();
     } catch (error) {
@@ -103,7 +94,7 @@ const CreateAnimalModal: React.FC<AnimalModalProps> = ({ isOpen, onClose, specie
       <ModalOverlay />
       <ModalContent maxW="900px">
         <form onSubmit={onSubmit}>
-          <ModalHeader fontFamily="var(--font-koho)" fontWeight="bold" fontSize="4xl" color="cyan.600">Cadastrar Animal</ModalHeader>
+          <ModalHeader fontFamily="var(--font-koho)" fontWeight="bold" fontSize="4xl" color="cyan.600">Editar Animal</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
@@ -113,9 +104,7 @@ const CreateAnimalModal: React.FC<AnimalModalProps> = ({ isOpen, onClose, specie
                   <Input name={field.label.toLowerCase().replace(/\s+/g, "")} value={formValues[field.label.toLowerCase()]}
                     borderWidth="1px" borderColor="cyan.300" type={field?.type ?? "text"} placeholder={field.placeholder} ref={index === 0 ? initialRef : null} fontSize="sm" fontWeight="regular"
                     onChange={handleChange} />
-                  {errorMessages[field.label.toLowerCase().replace(/\s+/g, "")] && (
-                    <FormHelperText color="red.400">{errorMessages[field.label.toLowerCase().replace(/\s+/g, "")]}</FormHelperText>
-                  )}
+                
                 </FormControl>
               ))}
               <FormControl isInvalid={!!errorMessage}>
@@ -136,28 +125,6 @@ const CreateAnimalModal: React.FC<AnimalModalProps> = ({ isOpen, onClose, specie
                   ))}
                 </Select>
               </FormControl>
-              <FormControl>
-                <FormLabel fontFamily="var(--font-koho)" color="cyan.600">Adicionar Imagem</FormLabel>
-                <Input
-                  onChange={handleFileChange}
-                  type="file"
-                  borderWidth="2px"
-                  borderColor="cyan.300"
-                  sx={{
-                    "::file-selector-button": {
-                      height: 10,
-                      padding: 0,
-                      mr: 4,
-                      background: "none",
-                      border: "none",
-                      fontWeight: "bold",
-                      fontFamily: "var(--font-koho)",
-                      color: "gray.600"
-                    },
-                  }}
-                />
-                <FormHelperText>.JPG, .SVG ou .WEBP</FormHelperText>
-              </FormControl>
             </Grid>
           </ModalBody>
           <ModalFooter>
@@ -176,4 +143,4 @@ const CreateAnimalModal: React.FC<AnimalModalProps> = ({ isOpen, onClose, specie
   );
 };
 
-export default CreateAnimalModal;
+export default UpdateAnimalModal;
