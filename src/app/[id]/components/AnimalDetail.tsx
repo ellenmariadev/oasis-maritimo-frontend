@@ -14,10 +14,10 @@ import { redirect } from "next/navigation";
 import { deleteAnimal } from "@/services/animals";
 
 type AnimalComponentProps = {
-    animal: Animal;
-    animalsData: Animal[];
-    annotations: Annotation[];
-    species: Specie[];
+  animal: Animal;
+  animalsData: Animal[];
+  annotations: Annotation[];
+  species: Specie[];
 };
 
 export const AnimaDetail: FC<AnimalComponentProps> = ({ animal, animalsData, annotations, species }) => {
@@ -46,6 +46,14 @@ export const AnimaDetail: FC<AnimalComponentProps> = ({ animal, animalsData, ann
     }
   };
 
+  let role = "";
+  if (typeof window !== "undefined") {
+    role = localStorage.getItem("@role") ?? "";
+  }
+
+  const userRole = role === "BIOLOGIST" || role === "ADMIN";
+
+
   return (
     <Container maxW={"90%"}>
       <Header />
@@ -55,46 +63,48 @@ export const AnimaDetail: FC<AnimalComponentProps> = ({ animal, animalsData, ann
           <Box pl={10} width="100%">
             <Stack direction="row" spacing={4} placeItems="center" justifyContent="space-between">
               <Heading as={"h1"} fontFamily="var(--font-koho)" color="gray.500" size={"xl"}>{animal.name}</Heading>
-              <ButtonGroup gap={4}>
+              {userRole && (
+                <ButtonGroup gap={4}>
 
-                <Button leftIcon={<BiTrash />} onClick={handleDelete}>
-                                    Excluir
-                </Button>
-                <Button leftIcon={<BiEdit />} colorScheme="yellow" onClick={onOpenUpdateModal}>
-                                    Editar
-                </Button>
-              </ButtonGroup>
+                  <Button leftIcon={<BiTrash />} onClick={handleDelete}>
+                    Excluir
+                  </Button>
+                  <Button leftIcon={<BiEdit />} colorScheme="yellow" onClick={onOpenUpdateModal}>
+                    Editar
+                  </Button>
+                </ButtonGroup>
+              )}
             </Stack>
             <Stack direction="row" mb={4} mt={5}>
               <Tag size="sm" variant='subtle' colorScheme='cyan' >
-                                Espécie
+                Espécie
               </Tag>
               <Text>{typeof animal.specie !== "string" && animal.specie.name}</Text>
             </Stack>
 
             <Stack direction="row" mb={4}>
               <Tag size="sm" variant='subtle' colorScheme='cyan'>
-                                Idade
+                Idade
               </Tag>
               <Text>{animal.age}</Text>
             </Stack>
             <Stack direction="row" mb={4}>
               <Tag size="sm" variant='subtle' colorScheme='cyan'>
-                                Data de Chegada
+                Data de Chegada
               </Tag>
               <Text>{convertDate(animal.arrivalDate)}</Text>
             </Stack>
 
             <Stack direction="row" mb={4}>
               <Tag size="sm" variant='subtle' colorScheme='cyan'>
-                                Peso
+                Peso
               </Tag>
               <Text>{animal.weight}</Text>
             </Stack>
 
             <Stack direction="row">
               <Tag size="sm" variant='subtle' colorScheme='cyan'>
-                                Tamanho
+                Tamanho
               </Tag>
               <Text>{animal.length}</Text>
             </Stack>
@@ -105,16 +115,17 @@ export const AnimaDetail: FC<AnimalComponentProps> = ({ animal, animalsData, ann
         <Divider my={5} />
         <Heading as={"h2"} size={"lg"} fontFamily="var(--font-koho)" color="gray.500">Habitat</Heading>
         <Text>{animal.habitat}</Text>
-        {/* Se o usuário for um biólogo */}
         <Box as={"section"} mt={10}>
           <Stack direction="row">
 
             <Tag fontSize={"2rem"} variant='subtle' colorScheme='cyan' px={"2rem"} fontFamily="var(--font-koho)" fontWeight="medium">
-                            Anotações
+              Anotações
             </Tag>
-            <Tooltip label="Criar anotação" aria-label="Criar anotação">
-              <IconButton aria-label="Criar anotação" icon={<MdAdd size={"md"} />} colorScheme="cyan" variant="outline" onClick={onOpenCreateModal} />
-            </Tooltip>
+            {userRole && (
+              <Tooltip label="Criar anotação" aria-label="Criar anotação">
+                <IconButton aria-label="Criar anotação" icon={<MdAdd size={"md"} />} colorScheme="cyan" variant="outline" onClick={onOpenCreateModal} />
+              </Tooltip>
+            )}
           </Stack>
           <List mt={5}>
             {annotations.filter(annotation => annotation.animal?.id === animal.id).map((annotation) => (

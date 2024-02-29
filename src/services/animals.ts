@@ -61,7 +61,7 @@ export async function getAnimal(id: string) {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
 
   const data = (await response.json()) as Animal;

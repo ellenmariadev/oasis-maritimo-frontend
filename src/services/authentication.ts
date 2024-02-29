@@ -19,6 +19,8 @@ export async function login(data: User) {
 
   const responseData = await response.json();
 
+  document.cookie = `token=${responseData.token}; path=/;`;
+
   localStorage.setItem("@token", responseData.token);
   localStorage.setItem("@login", responseData.username);
   localStorage.setItem("@role", responseData.role);
