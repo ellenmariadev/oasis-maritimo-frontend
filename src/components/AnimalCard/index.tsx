@@ -3,14 +3,18 @@
 import { Card, Image, Box, CardBody, Heading, Text } from "@chakra-ui/react";
 import { Animal } from "@/services/types";
 import styles from "./styles.module.scss";
+import { useRouter } from "next/navigation";
 
 type AnimalCardProps = {
-    animal: Animal;
+  animal: Animal;
 };
 
 const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
+
+  const { push } = useRouter();
+
   return (
-    <Card as={"button"} key={animal.id} direction={{ base: "column", sm: "row" }} placeItems="center" height="8rem" width="100%" border='1px' borderColor='cyan.100' className={styles.animalCard}>
+    <Card as={"button"} onClick={() => push(`/${animal.id}`)} key={animal.id} direction={{ base: "column", sm: "row" }} placeItems="center" height="8rem" width="100%" border='1px' borderColor='cyan.100' className={styles.animalCard}>
       <Box pl={4} placeContent="center">
         <Image maxH={"6rem"} src={animal.imageUrl} alt={animal.name} borderRadius='lg' />
       </Box>
