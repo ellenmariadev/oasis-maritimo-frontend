@@ -22,6 +22,7 @@ export async function login(data: User) {
   localStorage.setItem("@token", responseData.token);
   localStorage.setItem("@login", responseData.username);
   localStorage.setItem("@role", responseData.role);
+  localStorage.setItem("@userId", responseData.id);
 
   return responseData;
 }

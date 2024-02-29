@@ -1,7 +1,15 @@
+export enum Role {
+  ADMIN = "ADMIN",
+  CARETAKER = "CARETAKER",
+  VETERINARIAN = "VETERINARIAN",
+  BIOLOGIST = "BIOLOGIST"
+}
+
 export type User = {
   id?: string;
   login: string;
   password: string;
+  role?: Role;
 };
 
 export type Specie = {
@@ -33,4 +41,23 @@ export type AnimalRequest = {
   length: number;
   habitat: string;
   imageUrl?: string;
+};
+
+export type Annotation = {
+  id?: string;
+  title: string;
+  description: string;
+  author: User;
+  animal: Animal;
+  createdAt: string;
+  tags: string[];
+}
+
+export type AnnotationRequest = {
+  id?: string;
+  title: string;
+  description: string;
+  authorId?: string;
+  animalId?: string;
+  tags?: string[];
 };
