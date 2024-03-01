@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Oásis Marítimo
+Repositório correspondente ao frontend do sistema **Oásis Marítimo**.\
+Acesse o backend: https://github.com/ellenmariadev/oasis-maritimo-backend
 
-## Getting Started
+ ### ○ Tecnologias
+ 
+ <kbd> <br> React/TypeScript <br>  </kbd> ⇢
+ <kbd> <br> ESLint <br> </kbd> ⇢
+ <kbd> <br> Prettier <br> </kbd>  ⇢
+ <kbd> <br> Next.js <br> </kbd> ⇢
+ <kbd> <br> Chakra UI <br> </kbd> ⇢
+ <kbd> <br> Netlify <br> </kbd> 
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  ### ○ Variáveis de ambiente
+  
+```java
+ NEXT_PUBLIC_API_URL=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ ## 🎡 Rodando o projeto localmente
+ 
+```bash
+# Clone o repositório
+$ git clone <https://github.com/ellenmariadev/oasis-maritimo-frontend.git>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Acesse a pasta do projeto no terminal/cmd
+$ cd oasis-maritimo-frontend
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# Instale as dependências
+$ yarn install
 
-## Learn More
+# Execute a aplicação 
+$ yarn dev
 
-To learn more about Next.js, take a look at the following resources:
+# Pronto para acessar 🎉
+$ <http://localhost:3000>
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Deploy 
+**Precisa ter um usuário(admin) e senha(om.1234)**\
+https://oasismaritmo.netlify.app/
